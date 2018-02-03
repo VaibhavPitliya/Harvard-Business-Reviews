@@ -1,0 +1,73 @@
+
+Reading data into R
+```{r}
+setwd("C:/Users/vaibhav/Desktop/DataSets")
+dean.df<-read.csv("DataDeansDilemma.csv")
+View(dean.df)
+```
+Summary of Data
+```{r}
+summary(dean.df)
+library("psych")
+describe(dean.df)
+```
+Median Salary of all the students
+```{r}
+median(dean.df$Salary)
+```
+Percentage of students placed
+```{r}
+my.table<-with(dean.df,table(Placement))
+r<-prop.table(my.table)
+round(r*100,2)
+```
+Using R to create a dataframe called placed, that contains a subset of only those students who were successfully placed. 
+```{r}
+placed.df<-subset(dean.df,Placement=="Placed" ,select=c(SlNo,Gender,Placement,Salary,Percent_MBA))
+placed.df
+```
+Using R to find the  median salary of students who were placed.
+```{r}
+median(placed.df$Salary)
+```
+Use R to create a table showing the mean salary of males and females, who were placed. 
+```{r}
+aggregate(placed.df$Salary,list(placed.df$Gender),mean)
+```
+Using R to generate the following histogram showing a breakup of the MBA performance of the students who were placed
+```{r}
+hist(placed.df$Percent_MBA,main="MBA Perfomance of placed students",xlab="MBA Percentage",ylab="Count",col="grey")
+```
+Creatin a dataframe called notplaced, that contains a subset of only those students who were NOT placed after their MBA.
+```{r}
+notplaced.df<-subset(dean.df,Placement=="Not Placed",select=c(SlNo,Gender,Placement,Salary,Percent_MBA))
+notplaced.df
+```
+Drawing two histograms side-by-side, visually comparing the MBA performance of Placed and Not Placed students
+```{r}
+par(mfrow=c(1,2))
+with(placed.df,hist(placed.df$Percent_MBA,main="MBA Perfomance of placed students",xlab="MBA Percentage",ylab="Count",col="grey"))
+with(notplaced.df,hist(notplaced.df$Percent_MBA,main="MBA Perfomance of not placed students",xlab="MBA Percentage",ylab="Count",col="grey"))
+par(mfrow=c(1,1))
+```
+Using R to draw two boxplots, one below the other, comparing the distribution of salaries of males and females who were placed
+```{r}
+boxplot(placed.df$Salary~placed.df$Gender,horizontal=TRUE,main="Comparision of salaries of Male and female",xlab="Salary",ylab="Gender",yaxt="n")
+axis(side=2,at=c(1,2),labels=c("Female","Male"))
+```
+Creating a dataframe called placedET, representing students who were placed after the MBA and who also gave some MBA entrance test before admission into the MBA program. 
+```{r}
+placedET.df<-subset(dean.df,Placement=="Placed"& S.TEST=="1" ,select=c(SlNo,Gender,S.TEST,Entrance_Test,Percentile_ET,Placement,Salary,Percent_MBA))
+placedET.df
+```
+Draw a Scatter Plot Matrix for 3 variables -- {Salary, Percent_MBA, Percentile_ET} using the dataframe placedET.
+```{r}
+library(car)
+scatterplotMatrix(~Salary+Percent_MBA+Percentile_ET,data=placedET.df,diagonal="density")
+```
+
+
+
+
+
+
