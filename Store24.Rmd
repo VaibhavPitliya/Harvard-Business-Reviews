@@ -1,0 +1,99 @@
+```{r}
+setwd("C:/Users/vaibhav/Desktop/DataSets")
+Store24.df<-read.csv("Store24.csv")
+attach(Store24.df)
+View(Store24.df)
+```
+Use R to measure the mean and standard deviation of Profit.
+```{r}
+mean(Profit)
+sd(Profit)
+```
+Use R to measure the mean and standard deviation of MTenure.
+```{r}
+mean(MTenure)
+sd(MTenure)
+```
+Use R to measure the mean and standard deviation of CTenure.
+```{r}
+mean(CTenure)
+sd(CTenure)
+```
+Use R to print the {StoreID, Sales, Profit, MTenure, CTenure} of the top 10 most profitable stores.
+```{r}
+attach(Store24.df)
+newdata<-Store24.df[order(-Store24.df$Profit),]
+newdata[1:10,1:5]
+```
+Use R to print the {StoreID, Sales, Profit, MTenure, CTenure} of the bottom 10 least profitable stores.
+```{r}
+attach(Store24.df)
+newdata<-Store24.df[order(Store24.df$Profit),]
+newdata[1:10,1:5]
+```
+Use R to draw a scatter plot of Profit vs. MTenure.
+```{r}
+library(car)
+scatterplot(y=Profit,x=MTenure,main="Profit vs. MTenure",col="black",smoother.args=list(ity=2))
+abline(lm(Store24.df$Profit~Store24.df$MTenure),col="red",lty="dotted")
+```
+Use R to draw a scatter plot of Profit vs. CTenure.
+```{r}
+plot(y=Profit,x=CTenure,main="Profit vs. CTenure",col="black")
+abline(lm(Store24.df$Profit~Store24.df$CTenure),col="red",lty="dotted")
+```
+Use R to construct a Correlation Matrix for all the variables in the dataset. (Display the numbers up to 2 Decimal places)
+```{r}
+round(cor(Store24.df),2)
+```
+Use R to measure the correlation between Profit and MTenure. (Display the numbers up to 2 Decimal places)
+```{r}
+round(cor(Store24.df$Profit,Store24.df$MTenure),2)
+```
+Use R to measure the correlation between Profit and CTenure.  (Display the numbers up to 2 Decimal places)
+```{r}
+round(cor(Store24.df$Profit,Store24.df$CTenure),2)
+```
+Use R to construct the following Corrgram based on all variables in the dataset
+```{r}
+library(corrgram)
+corrgram(Store24.df,order=TRUE,lower.panel=panel.shade,upper.panel=panel.pie,text.panel=panel.txt,main="Corrgram of Store24")
+```
+Run a Pearson's Correlation test on the correlation between Profit and MTenure. What is the p-value?
+```{r}
+cor.test(Store24.df$Profit,Store24.df$MTenure)
+```
+Run a Pearson's Correlation test on the correlation between Profit and CTenure. What is the p-value?
+```{r}
+cor.test(Store24.df$Profit,Store24.df$CTenure)
+```
+Run a regression of Profit on {MTenure, CTenure Comp, Pop, PedCount, Res, Hours24, Visibility}.
+```{r}
+
+fit<-lm(Profit~MTenure+CTenure+Comp+Pop+PedCount+Res+Hours24+Visibility,Store24.df)
+summary(fit)
+```
+List the explanatory variable(s) whose beta-coefficients are statistically significant (p < 0.05).
+
+Mtenure, Comp,PedCount
+
+List the explanatory variable(s) whose beta-coefficients are not statistically significant (p > 0.05).
+
+Visibility
+
+What is expected change in the Profit at a store, if the Manager's tenure i.e. number of months of experience with Store24, increases by one month?
+
+760.993$
+
+What is expected change in the Profit at a store, if the Crew's tenure i.e. number of months of experience with Store24, increases by one month?
+
+944.978
+
+
+Executive Summary
+1)Effect of Tenure of managers and crew on profits was observed. It was found that tenure of managers in top 10 shops was 4 times 10 least profitable store
+2)Pearson's Correlation test proves that p value is 8.193e-05 for MTenure and  0.02562 for CTenure. Hence Mtenure is strongly correlated to profits . Hence Managers affect the profit at a store more.
+3)Corrgram shows visual correlation between all variables and hence makes understanding simple
+4) Regression Ananlysis shows that M tenure ie tenure of manager, Number of competitors per 10,000 people within a1/2 mile radius and Population in that radius affect Profit more .
+It had predicted  model using which we can predict profit of any store.""
+
