@@ -1,0 +1,199 @@
+PART A: PRIMARY ANALYSIS!
+READING DATA IN R
+1.
+```{r}
+setwd("c:/Users/vaibhav/Desktop/DataSets")
+data.df<-read.csv("MbaStartingSalariesData.csv")
+View(data.df)
+```
+SUMMARY OF DATA
+2(a)
+```{r}
+summary(data.df)
+```
+2(b)
+```{r}
+library(psych)
+describe(data.df)
+```
+REMOVING PEOPLE WHO DIDN'T ANSWER SURVEY
+3(a)
+```{r}
+newdata.df<-data.df[which(data.df$salary!=998),]
+View(newdata.df)
+dim(newdata.df)
+```
+3(b)SUMMARIZING THE NEW DATA SET
+```{r}
+summary(newdata.df)
+```
+3(c)Finding % unplaced
+```{r}
+table1<-with(newdata.df,table(newdata.df$salary))
+prop.table(table1)*100
+```
+->Hence out of total people who did give the survey 39.47% were not placed and remainf 60.53% were placed
+FINDING THE FACTORS OF WHY ONE WAS NOT PLACED OR PLACED BY COMPAIRING THE AVERAGES OF ALL
+4.
+```{r}
+placed.df<-newdata.df[which(newdata.df$salary!=0),]
+View(placed.df)
+unplaced.df<-newdata.df[which(newdata.df$salary==0),]
+View(unplaced.df)
+```
+COMPARING PLACED AND UNPLACED STUDENTS DATA
+5(a) UNPLACED
+```{r}
+table2<-with(unplaced.df,table(unplaced.df$sex))
+table2
+prop.table(table2)*100
+table4<-with(unplaced.df,table(unplaced.df$satis))
+table4
+```
+```{r}
+mean.age.unplaced<-mean(unplaced.df$age)
+mean.gmat_tot.unplaced<-mean(unplaced.df$gmat_tot)
+mean.gmat_qpc.unplaced<-mean(unplaced.df$gmat_qpc)
+mean.gmat_vpc.unplaced<-mean(unplaced.df$gmat_vpc)
+mean.gmat_tpc.unplaced<-mean(unplaced.df$gmat_tpc)
+mean.s_avg.unplaced<-mean(unplaced.df$s_avg)
+mean.f_avg.unplaced<-mean(unplaced.df$f_avg)
+mean.work_yrs.unplaced<-mean(unplaced.df$work_yrs)
+```
+5(b) PLACED
+```{r}
+table5<-with(placed.df,table(placed.df$sex))
+table5
+prop.table(table5)*100
+table7<-with(placed.df,table(placed.df$satis))
+table7
+```
+```{r}
+mean.age.placed<-mean(placed.df$age)
+mean.gmat_tot.placed<-mean(placed.df$gmat_tot)
+mean.gmat_qpc.placed<-mean(placed.df$gmat_qpc)
+mean.gmat_vpc.placed<-mean(placed.df$gmat_vpc)
+mean.gmat_tpc.placed<-mean(placed.df$gmat_tpc)
+mean.s_avg.placed<-mean(placed.df$s_avg)
+mean.f_avg.placed<-mean(placed.df$f_avg)
+mean.work_yrs.placed<-mean(placed.df$work_yrs)
+```
+5(C)
+```{r}
+mean.age.DIFF<-mean(placed.df$age)-mean(unplaced.df$age)
+mean.gmat_tot.DIFF<-mean(placed.df$gmat_tot)-mean(unplaced.df$gmat_tot)
+mean.gmat_qpc.DIFF<-mean(placed.df$gmat_qpc)-mean(unplaced.df$gmat_qpc)
+mean.gmat_vpc.DIFF<-mean(placed.df$gmat_vpc)-mean(unplaced.df$gmat_vpc)
+mean.gmat_tpc.DIFF<-mean(placed.df$gmat_tpc)-mean(unplaced.df$gmat_tpc)
+mean.s_avg.DIFF<-mean(placed.df$s_avg)-mean(unplaced.df$s_avg)
+mean.f_avg.DIFF<-mean(placed.df$f_avg)-mean(unplaced.df$f_avg)
+mean.work_yrs.DIFF<-mean(placed.df$work_yrs)-mean(unplaced.df$work_yrs)
+```
+```{r}
+mean.age.DIFF
+mean.gmat_tot.DIFF
+mean.gmat_qpc.DIFF
+mean.gmat_vpc.DIFF
+mean.gmat_tpc.DIFF
+mean.s_avg.DIFF
+mean.f_avg.DIFF
+mean.work_yrs.DIFF
+```
+
+
+EXECUTIVE SUMMARY 1: General Understanding
+1.Age
+Age of unplaced people is higher than that of placed people by almost 1.5 years
+Hence in general people with lesser age did get placed
+2.Sex
+  Placed:Out of all placed 74% are male rest are female
+  Unplaced:Out of all unplaced ~74% are male rest are female
+  Hence Sex is not an issue as overall number of males are high, number of placed and unplaced males are high too
+3.gmat_tot: GMAT total score
+The difference in GMAT score of placed and unplaced people is 4.94.
+Hence people who scored more on an average did get placed.
+4.gmat_qpc: Quantitative GMAT percentile
+The difference in quantitative GMAT percentile of placed and unplaced people is 2.19.
+Hence people who have higher Percentile did get placed.
+5.gmat_vpc:Verbal GMAT percentile
+The difference in verbal GMAT percentile of placed and unplaced people is 0.359.
+Hence people who have higher verbalPercentile did get placed.
+6.gmat_tpc: overall Gmat percentile
+The difference in overall GMAT percentile of placed and unplaced people is 2.18
+Hence people who have higherPercentile did get placed.
+7.s_avg: Spring MBA Average
+People who are unplaced SUPRISINGLY had higher Spring average
+8.f_avg: Fall MBA Average
+People who are unplaced SUPRISINGLY had higher Fall average
+9.Working Years
+People who are unplaced SUPRISINGLY had more working experience too.
+10. Satisfaction
+People who were unplaced were moe satisfied infact no. one rated below 4.
+
+PART B COMPARISION BETWEEN PLACED AND UNPLACED
+```{r}
+newdata.df$sex[newdata.df$sex==1]='Male'
+newdata.df$sex[newdata.df$sex==2]='Female'
+newdata.df$frstlang[newdata.df$frstlang== 1]='English'
+newdata.df$frstlang[newdata.df$frstlang== 2]='Other'
+newdata.df$GotPlaced = (newdata.df$salary >1000)
+newdata.df$GotPlaced <- factor(newdata.df$GotPlaced)
+View(newdata.df)
+```
+```{r}
+table8<-with(newdata.df,table(newdata.df$GotPlaced))
+table8
+```
+
+125 got placed 103 didnot
+```{r}
+placed.df$sex[placed.df$sex==1]='Male'
+placed.df$sex[placed.df$sex==2]='Female'
+placed.df$frstlang[placed.df$frstlang== 1]='English'
+placed.df$frstlang[placed.df$frstlang== 2]='Other'
+table9<-with(placed.df,table(placed.df$sex))
+table9
+table10<-with(placed.df,table(placed.df$frstlang))
+table10
+table14<-table(placed.df$sex,placed.df$frstlang)
+table14
+```
+
+102 Males got placed whereas 36 females
+122 people who were placed knew English 16 didnt
+```{r}
+unplaced.df$sex[unplaced.df$sex==1]='Male'
+unplaced.df$sex[unplaced.df$sex==2]='Female'
+unplaced.df$frstlang[unplaced.df$frstlang== 1]='English'
+unplaced.df$frstlang[unplaced.df$frstlang== 2]='Other'
+table11<-with(unplaced.df,table(unplaced.df$sex))
+table11
+table12<-with(unplaced.df,table(unplaced.df$frstlang))
+table12
+table13<-table(unplaced.df$sex,unplaced.df$frstlang)
+table13
+```
+67 Males were unplaced 23 females were placed
+82 knew English 8 did not
+PART C:VISUALIZATION
+Visualizing Salary vs Various factors
+```{r}
+par(mfrow=c(2,2))
+boxplot(salary~age,data=data.df,main="Salary vs age",horizontal=TRUE)
+boxplot(salary~sex,data=data.df,main="Salary vs sex",horizontal=TRUE)
+boxplot(salary~frstlang,data=data.df,main="Salary vs Language",horizontal=TRUE)
+boxplot(salary~satis,data=data.df,main="Salary vs Satisfaction",horizontal=TRUE)
+```
+
+PART D: REGRESSION
+Dependent Variable: Salary
+Independent Variable: age,sex,gmat_tot,gmat_qpc,gmat_vpc,gmat_tpc,s_avg,s_favg,quarter,work_yrs,firstlang,satis
+
+Model1: Seeing how MBA factors like s_avg, f_avg,quarter affect salary
+```{r}
+fit1<-lm(placed.df$salary~placed.df$gmat_tot+placed.df$gmat_qpc+placed.df$gmat_vpc+placed.df$work_yrs)
+summary(fit1)
+```
+
+
+
